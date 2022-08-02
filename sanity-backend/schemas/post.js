@@ -32,7 +32,7 @@ export default {
       type: 'array',
       of: [
         {
-          type: 'referance',
+          type: 'reference',
           to: [{ type: 'user' }]
         },
       ],
