@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import React from 'react'
 import axios from 'axios';
 
 import VideoCard from '../components/VideoCard';
