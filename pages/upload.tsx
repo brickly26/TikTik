@@ -24,6 +24,10 @@ const Upload = () => {
 
   const router = useRouter();
 
+  useEffect(() => {
+
+  }, [userProfile, router])
+
   const uploadVideo = async (e: any) => {
     const selectedFile = e.target.files[0];
     const fileTypes = ["video/mp4", "video/webm", "video/ogg"];

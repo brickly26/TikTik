@@ -73,7 +73,7 @@ const Profile = ({ data }: IProps) => {
         <div className="flex gap-6 flex-wrap md:justify-start">
           {videosList.length > 0 ? (
             videosList.map((post: Video, idx: number) => (
-                <VidoeCard post={post} key={idx} />
+                <VidoeCard post={post} key={idx} isOnProfile={true} />
             ))
           ) : <NoResults text={`No ${showUserVideos ? '' : 'Liked'} Videos`}/>}
         </div>
