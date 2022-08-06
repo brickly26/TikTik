@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NextPage } from 'next';
-import Image from 'Next/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi';
 import { BsPlay, BsFillPlayFill , BsFillPauseFill } from 'react-icons/bs';
