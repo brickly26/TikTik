@@ -7,6 +7,7 @@ import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import { BiSearch } from 'react-icons/bi';
 import { IoMdAdd } from 'react-icons/io';
 
+import { IUser } from '../types';
 import Logo from '../utils/tiktik-logo.png'
 import { createOrGetUser } from '../utils';
 
