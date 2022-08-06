@@ -24,11 +24,18 @@ const Upload = () => {
 
   const router = useRouter();
 
+  useEffect(() => {
+
+  }, [userProfile, router])
+
   const uploadVideo = async (e: any) => {
     const selectedFile = e.target.files[0];
     const fileTypes = ["video/mp4", "video/webm", "video/ogg"];
 
     if (fileTypes.includes(selectedFile.type)) {
+      setWrongFileType(false);
+      setIsLoading(true)
+
       client.assets
         .upload("file", selectedFile, {
           contentType: selectedFile.type,
@@ -37,7 +44,6 @@ const Upload = () => {
         .then((data) => {
           setVideoAsset(data);
           setIsLoading(false);
-          setWrongFileType(false);
         });
     } else {
       setIsLoading(false);
@@ -73,9 +79,16 @@ const Upload = () => {
     }
   }
 
+  const handleDiscard = () => {
+    setSavingPost(false);
+    setVideoAsset(undefined);
+    setCaption('');
+    setCategory('');
+  }
+
   return (
-    <div className="flex w-full h-full absolute left-0 top-[60px] mb-10 pt-10 lg:pt-20 bg-[#F8F8F8] justify-center">
-      <div className="bg-white rounded-lg xl:h-[80vh] w-[60%] flex gap-6 flex-wrap justify-between items-center p-14 pt-6">
+    <div className="flex w-full h-full absolute left-0 top-[60px] lg:top-[70px] mb-10 pt-10 lg:pt-20 bg-[#F8F8F8] justify-center">
+      <div className="bg-white rounded-lg xl:h-[80vh] flex gap-6 flex-wrap justify-between items-center p-14 pt-6">
         <div>
           <div>
             <p className="text-2xl font-bold">Upload Video</p>
@@ -83,19 +96,33 @@ const Upload = () => {
               Post a video to your account
             </p>
           </div>
-          <div className="border-dashed rounded-xl border-4 border-gray-200 flex flex-col justify-center items-center outline-none mt-10 w-[260px] h-[460px] p-10 cursor-pointer hover:border-red-300 hover:bg-gray-100">
+          <div className="border-dashed rounded-xl border-4 border-gray-200 flex flex-col justify-center items-center outline-none mt-10 w-[260px] h-[458px] p-10 cursor-pointer hover:border-red-300 hover:bg-gray-100">
             {isLoading ? (
-              <p>Uploading...</p>
+              <p className="text-center text-3xl text-red-400 font-semibold">
+                Uploading...
+              </p>
             ) : (
               <div>
                 {videoAsset ? (
-                  <div>
+                  <div className="rounded-3xl w-[300px] p-4 flex flex-col gap-6 justify-center items-center">
                     <video
                       src={videoAsset.url}
                       loop
                       controls
-                      className="rounded-xl h-[450px] mt-16 bg-black"
-                    ></video>
+                      className="rounded-xl h-[462px] mt-16 bg-black"
+                    />
+                    <div className="flex justify-between gap-20">
+                      <p className="text-lg">
+                        {videoAsset.originalFilename}
+                      </p>
+                      <button
+                        type="button"
+                        className="rounded-full bg-gray-200 text-red-400 p-2 text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out"
+                        onClick={() => setVideoAsset(undefined)}
+                      >
+                        <MdDelete />
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <label className="cursor-pointer">
@@ -112,7 +139,7 @@ const Upload = () => {
                         Up to 10 minutes <br />
                         Less than 2GB
                       </p>
-                      <p className="bg-[#F51997] text-center mt-10 rounded text-white text-md font-medium p-2 w-52 outline-none">
+                      <p className="bg-[#F51997] text-center mt-8 rounded text-white text-md font-medium p-2 w-52 outline-none">
                         Select File
                       </p>
                     </div>
@@ -127,8 +154,8 @@ const Upload = () => {
               </div>
             )}
             {wrongFileType && (
-              <p className="text-center text-xl text-red-400 font-semibold mt-4 w-[250px]">
-                Please select a video file
+              <p className="text-center text-xl text-red-400 font-semibold mt-4 w-[260px]">
+                Please select a video file (mp4 or webm or ogg)
               </p>
             )}
           </div>
@@ -139,13 +166,12 @@ const Upload = () => {
             type="text"
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            className="rounded outline-none text-md border-2 border-gray-200 p-2"
-
+            className="rounded lg:after:w-650 outline-none text-md border-2 border-gray-200 p-2"
           />
-          <label>Choose a Category</label>
+          <label className="text-md font-medium">Choose a Category</label>
           <select
             onChange={(e) => setCategory(e.target.value)}
-            className="outline-none border-2 border-gray-200 text-md capitalize lg:p-4 p-2 rounded cursor-pointer"
+            className="outline-none lg:w-650 border-2 border-gray-200 text-md capitalize lg:p-4 p-2 rounded cursor-pointer"
           >
             {topics.map((topic) => (
               <option
@@ -159,18 +185,19 @@ const Upload = () => {
           </select>
           <div className="flex gap-6 mt-10">
             <button
-              onClick={() => {}}
+              onClick={handleDiscard}
               type="button"
               className="border-gray-300 border-2 text-md font-medium p-2 rounded w-28 lg:w-44 outline-none"
             >
               Discard
             </button>
             <button
+              disabled={videoAsset?.url ? false: true}
               onClick={handlePost}
               type="button"
               className="bg-[#F51997] text-white text-md font-medium p-2 rounded w-28 lg:w-44 outline-none"
             >
-              Post
+              {savingPost ? 'Posting...' : 'Post'}
             </button>
           </div>
         </div>
