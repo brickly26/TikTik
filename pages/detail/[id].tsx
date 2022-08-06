@@ -20,13 +20,14 @@ interface IProps {
 
 const Detail = ({ postDetails }: IProps) => {
   const [post, setPost] = useState(postDetails);
-  const [playing, setPlaying] = useState(false);
-  const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const [playing, setPlaying] = useState<boolean>(false);
+  const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
+  const { userProfile }: any = useAuthStore();
+  const [comment, setComment] = useState<string>('');
+  const [isPostingComment, setIsPostingComment] = useState<boolean>(false);
+  
   const videoRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
-  const { userProfile }: any = useAuthStore();
-  const [comment, setComment] = useState('');
-  const [isPostingComment, setIsPostingComment] = useState(false);
 
   const onVideoClick = () => {
     if (playing) {
@@ -56,7 +57,7 @@ const Detail = ({ postDetails }: IProps) => {
     }
   }
 
-  const addComment = async (e) => {
+  const addComment = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
     if(userProfile && comment) {
@@ -121,7 +122,7 @@ const Detail = ({ postDetails }: IProps) => {
         <div className="lg:mt-20 mt-10">
           <div className="flex gap-3 p-2 cursor-pointer font-semibold rounded">
             <div className="ml-4 md:w-20 md:h-20 w-16 h-16">
-              <Link href="/">
+              <Link href={`profile/${post.postedBy._id}`}>
                 <>
                   <Image
                     width={62}
@@ -135,7 +136,7 @@ const Detail = ({ postDetails }: IProps) => {
               </Link>
             </div>
             <div>
-              <Link href="/">
+              <Link href={`/profile/${post.postedBy._id}`}>
                 <div className="mt-3 flex flex-col gap-2">
                   <p className="flex gap-2 items-center md:text-md font-bold text-primary">
                     {post.postedBy.userName} {` `}
