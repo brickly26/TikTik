@@ -47,6 +47,6 @@ export default {
       name: 'topic',
       title: 'Topic',
       type: 'string'
-    },
+    }
   ],
 };
